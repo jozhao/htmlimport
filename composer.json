@@ -1,5 +1,5 @@
 {
-  "name": "htmlimport/htmlimport",
+  "name": "xing/htmlimport",
   "type": "library",
   "description": "PHP library and framework for dividing large HTML document into a structured Drupal book",
   "keywords": [
