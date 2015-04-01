@@ -2,6 +2,6 @@
 
 namespace HtmlImport;
 
-class HtmlImport {
+class Transaction {
 
 }
