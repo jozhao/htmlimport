@@ -2,6 +2,10 @@
 
 namespace HtmlImport;
 
+/**
+ * Class Document
+ * @package HtmlImport
+ */
 class Document
 {
     protected $document = null;
