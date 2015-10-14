@@ -13,7 +13,7 @@ use HtmlImport\Document;
  *
  * @package HtmlImport\Parse
  */
-abstract class ParserAbstract implements ParserInterface
+abstract class ParserAbstract extends ParserFilters implements ParserInterface
 {
     private $_document;
     private $_options;
@@ -45,6 +45,14 @@ abstract class ParserAbstract implements ParserInterface
     }
 
     /**
+     * @param \HtmlImport\Document\Document $document
+     */
+    public function saveDocument($document)
+    {
+        $this->_document->save($document);
+    }
+
+    /**
      * @return array
      */
     public function getOptions()
@@ -58,5 +66,18 @@ abstract class ParserAbstract implements ParserInterface
     public function setOptions($options)
     {
         $this->_options = $options;
+    }
+
+    /**
+     * Parse function.
+     */
+    public function parse()
+    {
+        $qp = $this->getDocument()->load();
+        $html = $qp->html();
+        // Strip tags.
+        self::stripTags($qp);
+        // Clean and save document.
+        $this->saveDocument(self::clean($html));
     }
 }

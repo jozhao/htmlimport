@@ -47,6 +47,14 @@ abstract class DocumentAbstract implements DocumentInterface
     }
 
     /**
+     * @param $document
+     */
+    public function save($document)
+    {
+        $this->setQp($document);
+    }
+
+    /**
      * @return mixed
      */
     public function getQp()

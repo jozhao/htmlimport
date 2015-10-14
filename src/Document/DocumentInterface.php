@@ -26,4 +26,9 @@ interface DocumentInterface
      * @return mixed
      */
     public function load();
+
+    /**
+     * @return mixed
+     */
+    public function save($document);
 }
