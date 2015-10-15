@@ -74,9 +74,16 @@ abstract class ParserAbstract extends ParserFilters implements ParserInterface
     public function parse()
     {
         $qp = $this->getDocument()->load();
-        $html = $qp->html();
         // Strip tags.
         self::stripTags($qp);
+    }
+
+    /**
+     * Cleanup HTML.
+     */
+    public function cleanup()
+    {
+        $html = $this->getDocument()->load()->html();
         // Clean and save document.
         $this->saveDocument(self::clean($html));
     }
