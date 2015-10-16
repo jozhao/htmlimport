@@ -25,20 +25,21 @@ class ProcessorMethods
         foreach ($qp as $key => $item) {
             $level = substr($item->tag(), 1);
             $parent = $level - 1;
+            $children = array();
 
-            $content = self::fetchContent($item);
+            $content = self::getSectionContent($item);
 
             $sections[] = array(
-              'tag' => $item->tag(),
+              'id' => $key,
               'level' => $level,
-              'parent' => $parent,
-              'text' => $item->text(),
+              'title' => $item->html(),
               'content' => $content,
+              'context' => array(
+                'parent' => array(),
+                'children' => $children,
+                'tag' => $item->tag(),
+              ),
             );
-
-            if ($parent >= 1) {
-                //$parent = $item->prevUntil('h'.$parent)->get();
-            }
         }
 
 
@@ -51,15 +52,18 @@ class ProcessorMethods
 
 
     /**
+     * Get section content.
+     *
      * @param $html
      * @param $item
      *
      * @return string
      */
-    static function fetchContent($item)
+    static function getSectionContent($item)
     {
         $raw = '';
 
+        // Scraping content until headings tag.
         $scraped = $item->nextUntil('h1,h2,h3,h4,h5,h6');
         foreach ($scraped as $i) {
             $raw .= $i->html();
