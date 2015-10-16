@@ -16,25 +16,55 @@ class ProcessorMethods
     /**
      * Split the imported document into sections.
      *
-     * Splits the imported HMTL into sections based upon heading elements. This
-     * is configurable via a source configuration on import.
+     * Splits the imported HMTL into sections based upon heading elements.
      */
     static function createSections($html, $headingLevel = 2)
     {
-        $pattern = '~(<h[1-'.$headingLevel.'])~';
-        $sectionsArray = preg_split($pattern, $html, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $qp = htmlqp($html, 'h1,h2,h3,h4,h5,h6');
+        // Loop headings.
+        foreach ($qp as $key => $item) {
+            $level = substr($item->tag(), 1);
+            $parent = $level - 1;
 
-        print_r($sectionsArray);
+            $content = self::fetchContent($item);
 
-        $sections = array();
-        foreach ($sectionsArray as $key => $item) {
-            if (preg_match("/(<h[1-6])/", $item)) {
-                $sections[]['level'] = substr($item, 2, 1);
-                //$parents[$section['level']] = $key + 1;
-                //$sections[]['parent_id'] = $parents[$section['level'] - 1];
+            $sections[] = array(
+              'tag' => $item->tag(),
+              'level' => $level,
+              'parent' => $parent,
+              'text' => $item->text(),
+              'content' => $content,
+            );
+
+            if ($parent >= 1) {
+                //$parent = $item->prevUntil('h'.$parent)->get();
             }
         }
 
-        return $sections;
+
+        echo "<pre>";
+        print_r($sections);
+        echo "</pre>";
+
+        //return $sections;
+    }
+
+
+    /**
+     * @param $html
+     * @param $item
+     *
+     * @return string
+     */
+    static function fetchContent($item)
+    {
+        $raw = '';
+
+        $scraped = $item->nextUntil('h1,h2,h3,h4,h5,h6');
+        foreach ($scraped as $i) {
+            $raw .= $i->html();
+        }
+
+        return $raw;
     }
 }

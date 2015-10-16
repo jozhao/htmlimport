@@ -109,8 +109,5 @@ abstract class ProcessorAbstract extends ProcessorMethods implements ProcessorIn
     {
         $content = $this->getContent();
         $sections = self::createSections($content);
-        echo "<pre>";
-        print_r($sections);
-        echo "</pre>";
     }
 }
